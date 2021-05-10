@@ -33,4 +33,12 @@ class UserService(private val userDAO: UserDAO) : BasicCrud<String, User> {
             userDAO.delete(this)
         }
     }
+
+    fun insertOrUpdate(user: User): User {
+        return if (user.id != null && userDAO.existsById(user.id)) {
+            userDAO.save(user)
+        } else {
+            userDAO.insert(user)
+        }
+    }
 }
