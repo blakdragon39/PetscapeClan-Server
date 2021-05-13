@@ -21,11 +21,12 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
-    implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
     implementation("org.springframework.boot:spring-boot-starter-web")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
 
-    implementation("com.google.firebase:firebase-admin:7.2.0")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+
+    implementation("com.google.api-client:google-api-client:1.31.2")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("com.github.fakemongo:fongo:2.1.0")
