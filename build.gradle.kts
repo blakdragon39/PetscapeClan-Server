@@ -28,6 +28,8 @@ dependencies {
 
     implementation("com.google.api-client:google-api-client:1.31.2")
 
+    implementation("org.mindrot:jbcrypt:0.4")
+
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("com.github.fakemongo:fongo:2.1.0")
 }

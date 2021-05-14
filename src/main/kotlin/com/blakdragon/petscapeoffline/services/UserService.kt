@@ -41,4 +41,6 @@ class UserService(private val userDAO: UserDAO) : BasicCrud<String, User> {
             userDAO.insert(user)
         }
     }
+
+    fun getByEmail(email: String): User? = userDAO.findByEmail(email)
 }
