@@ -21,7 +21,8 @@ class UserService(private val userDAO: UserDAO) : BasicCrud<String, User> {
     override fun insert(obj: User): User = userDAO.insert(obj)
 
     override fun update(obj: User): User {
-        return if (obj.id != null && userDAO.existsById(obj.id)) {
+        val id = obj.id
+        return if (id != null && userDAO.existsById(id)) {
             userDAO.save(obj)
         } else {
             throw ResponseStatusException(HttpStatus.NOT_FOUND)
@@ -35,7 +36,8 @@ class UserService(private val userDAO: UserDAO) : BasicCrud<String, User> {
     }
 
     fun insertOrUpdate(user: User): User {
-        return if (user.id != null && userDAO.existsById(user.id)) {
+        val id = user.id
+        return if (id != null && userDAO.existsById(id)) {
             userDAO.save(user)
         } else {
             userDAO.insert(user)

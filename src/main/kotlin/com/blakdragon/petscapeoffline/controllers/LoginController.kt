@@ -41,12 +41,15 @@ class LoginController(private val userService: UserService) {
     @PostMapping("/google")
     fun googleLogin(@RequestBody request: GoogleLoginRequest): UserResponse {
         val idToken = verifier.verify(request.idToken)
-        val email = idToken.payload["email"] as String
+        val email = idToken.payload["email"] as? String ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "No email found for user")
 
         if (idToken != null) {
             var user = userService.getByEmail(email)
             if (user == null) {
-                user = User(email = email)
+                user = User(
+                    email = email,
+                    displayName = idToken.payload["name"] as? String ?: "User"
+                )
             }
 
             user.token = UUID.randomUUID().toString()
