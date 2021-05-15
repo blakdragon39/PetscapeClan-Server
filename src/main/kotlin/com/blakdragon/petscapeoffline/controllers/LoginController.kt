@@ -32,7 +32,8 @@ class LoginController(private val userService: UserService) {
         val user = userService.insert(User(
             email = request.email,
             passwordHash = passwordHash,
-            displayName = request.displayName
+            displayName = request.displayName,
+            token = UUID.randomUUID().toString()
         ))
 
         return UserResponse(user)
