@@ -29,6 +29,8 @@ class LoginController(private val userService: UserService) {
     @PostMapping("/register")
     fun registerUser(@RequestBody request: RegisterRequest): UserResponse {
         val passwordHash = BCrypt.hashpw(request.password, BCrypt.gensalt(12))
+        if (userService.getByEmail(request.email) != null) throw ResponseStatusException(HttpStatus.BAD_REQUEST, "There's already an account for this email")
+
         val user = userService.insert(User(
             email = request.email,
             passwordHash = passwordHash,
