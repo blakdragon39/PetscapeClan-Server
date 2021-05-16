@@ -9,10 +9,11 @@ class User(
     @Id var id: String? = null,
     @Indexed(unique = true) var token: String? = null,
     @Indexed(unique = true) val email: String?,
+    @Indexed(unique = true) val discordId: String? = null,
     val passwordHash: String? = null,
-    val clanMembers: List<String> = listOf(),
+    val clanMembers: MutableList<String> = mutableListOf(),
     val displayName: String? = null,
-    val approved: Boolean = false,
-    val admin: Boolean = false,
-    val superAdmin: Boolean = false
+    val isApproved: Boolean = false,
+    val isAdmin: Boolean = false,
+    val isSuperAdmin: Boolean = false
 )

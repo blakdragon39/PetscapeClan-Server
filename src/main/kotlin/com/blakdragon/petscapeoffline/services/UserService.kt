@@ -25,7 +25,7 @@ class UserService(private val userDAO: UserDAO) : BasicCrud<String, User> {
         return if (id != null && userDAO.existsById(id)) {
             userDAO.save(obj)
         } else {
-            throw ResponseStatusException(HttpStatus.NOT_FOUND)
+            throw ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")
         }
     }
 
@@ -45,4 +45,6 @@ class UserService(private val userDAO: UserDAO) : BasicCrud<String, User> {
     }
 
     fun getByEmail(email: String): User? = userDAO.findByEmail(email)
+
+    fun getByToken(token: String): User? = userDAO.findByToken(token)
 }

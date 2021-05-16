@@ -3,6 +3,7 @@ package com.blakdragon.petscapeoffline.controllers
 import com.blakdragon.petscapeoffline.controllers.requests.GoogleLoginRequest
 import com.blakdragon.petscapeoffline.controllers.requests.LoginRequest
 import com.blakdragon.petscapeoffline.controllers.requests.RegisterRequest
+import com.blakdragon.petscapeoffline.controllers.responses.UserResponse
 import com.blakdragon.petscapeoffline.models.User
 import com.blakdragon.petscapeoffline.services.UserService
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier

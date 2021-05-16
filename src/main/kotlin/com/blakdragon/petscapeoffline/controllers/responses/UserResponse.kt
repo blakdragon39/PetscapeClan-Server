@@ -1,4 +1,4 @@
-package com.blakdragon.petscapeoffline.controllers
+package com.blakdragon.petscapeoffline.controllers.responses
 
 import com.blakdragon.petscapeoffline.models.User
 
@@ -8,7 +8,7 @@ class UserResponse(user: User) {
     val token = user.token
     val clanMembers = user.clanMembers
     val displayName = user.displayName
-    val approved = user.approved
-    val admin = user.admin
-    val superAdmin = user.superAdmin
+    val approved = user.isApproved
+    val admin = user.isAdmin
+    val superAdmin = user.isSuperAdmin
 }
