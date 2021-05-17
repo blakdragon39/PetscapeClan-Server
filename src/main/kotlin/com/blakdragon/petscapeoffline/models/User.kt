@@ -9,7 +9,7 @@ class User(
     @Id var id: String? = null,
     @Indexed(unique = true) var token: String? = null,
     @Indexed(unique = true) val email: String?,
-    @Indexed(unique = true) val discordId: String? = null,
+    val discordId: String? = null,
     val passwordHash: String? = null,
     val clanMembers: MutableList<String> = mutableListOf(),
     val displayName: String? = null,
