@@ -34,4 +34,6 @@ class ClanMemberService(private val clanMemberDAO: ClanMemberDAO) : BasicCrud<St
             clanMemberDAO.delete(this)
         }
     }
+
+    fun getByUserId(userId: String): List<ClanMember> = clanMemberDAO.findByUserId(userId)
 }

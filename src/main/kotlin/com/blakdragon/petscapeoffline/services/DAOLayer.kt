@@ -9,4 +9,6 @@ interface UserDAO : MongoRepository<User, String> {
     fun findByToken(token: String): User?
 }
 
-interface ClanMemberDAO : MongoRepository<ClanMember, String>
+interface ClanMemberDAO : MongoRepository<ClanMember, String> {
+    fun findByUserId(userId: String): List<ClanMember>
+}

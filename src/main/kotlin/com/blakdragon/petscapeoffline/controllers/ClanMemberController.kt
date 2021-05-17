@@ -2,6 +2,7 @@ package com.blakdragon.petscapeoffline.controllers
 
 import com.blakdragon.petscapeoffline.controllers.requests.AddClanMemberAsAdminRequest
 import com.blakdragon.petscapeoffline.controllers.requests.AddClanMemberRequest
+import com.blakdragon.petscapeoffline.controllers.requests.UserIdRequest
 import com.blakdragon.petscapeoffline.controllers.responses.UserResponse
 import com.blakdragon.petscapeoffline.models.ClanMember
 import com.blakdragon.petscapeoffline.models.enums.Rank
@@ -9,10 +10,7 @@ import com.blakdragon.petscapeoffline.services.ClanMemberService
 import com.blakdragon.petscapeoffline.services.UserService
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Controller
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestHeader
-import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
 import java.time.LocalDate
 
@@ -79,5 +77,10 @@ class ClanMemberController(
         user = userService.update(user)
 
         return UserResponse(user)
+    }
+
+    @GetMapping
+    fun getClanMembers(@RequestBody request: UserIdRequest): List<ClanMember> {
+        return clanMemberService.getByUserId(request.userId)
     }
 }
