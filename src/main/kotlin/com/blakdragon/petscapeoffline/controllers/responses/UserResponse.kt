@@ -8,7 +8,7 @@ class UserResponse(user: User) {
     val token = user.token
     val clanMembers = user.clanMembers
     val displayName = user.displayName
-    val approved = user.isApproved
-    val admin = user.isAdmin
-    val superAdmin = user.isSuperAdmin
+    val isApproved = user.isApproved
+    val isAdmin = user.isAdmin
+    val isSuperAdmin = user.isSuperAdmin
 }
