@@ -6,7 +6,7 @@ import com.blakdragon.petscapeoffline.models.enums.Rank
 import java.time.LocalDate
 
 class AddClanMemberAsAdminRequest(
-    val userId: String,
+    val userId: String?,
     val runescapeName: String,
     val rank: Rank,
     val joinDate: LocalDate,

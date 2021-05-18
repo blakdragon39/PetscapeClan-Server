@@ -10,7 +10,7 @@ import java.time.LocalDate
 @Document
 class ClanMember(
     @Id var id: String? = null,
-    val userId: String,
+    val userId: String?,
     val runescapeName: String,
     val rank: Rank,
     val joinDate: LocalDate,

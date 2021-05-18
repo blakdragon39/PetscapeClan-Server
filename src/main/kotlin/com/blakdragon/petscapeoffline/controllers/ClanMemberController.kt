@@ -25,9 +25,8 @@ class ClanMemberController(
     fun addClanMemberAsAdmin(
         @RequestHeader("Authorization") userToken: String,
         @RequestBody request: AddClanMemberAsAdminRequest
-    ): UserResponse {
+    ): ClanMember {
         val requestUser = userService.getByToken(userToken) ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid token")
-        var user = userService.getById(request.userId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")
         if (!requestUser.isAdmin) throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "Request unauthorized")
 
         var clanMember = ClanMember(
@@ -45,10 +44,13 @@ class ClanMemberController(
 
         clanMember = clanMemberService.insert(clanMember)
 
-        user.clanMembers.add(clanMember.id!!)
-        user = userService.update(user)
+        val user = request.userId?.let { userService.getById(it) }
+        user?.apply {
+            clanMembers.add(clanMember.id!!)
+            userService.update(this)
+        }
 
-        return UserResponse(user)
+        return clanMember
     }
 
     @PostMapping
