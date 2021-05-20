@@ -16,7 +16,7 @@ class ClanMemberController(
 ) {
 
     @PostMapping
-    fun addClanMemberAsAdmin(
+    fun addClanMember(
         @RequestHeader("Authorization") userToken: String,
         @RequestBody request: ClanMember
     ): ClanMember {

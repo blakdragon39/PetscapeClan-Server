@@ -1,1 +1,1 @@
-rootProject.name = "petscapeoffline"
+rootProject.name = "petscapeclan"

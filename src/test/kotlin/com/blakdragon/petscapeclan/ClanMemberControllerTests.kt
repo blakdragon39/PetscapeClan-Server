@@ -1,8 +1,7 @@
 package com.blakdragon.petscapeclan
 
 import com.blakdragon.petscapeclan.controllers.ClanMemberController
-import com.blakdragon.petscapeclan.controllers.requests.AddClanMemberAsAdminRequest
-import com.blakdragon.petscapeclan.controllers.requests.AddClanMemberRequest
+import com.blakdragon.petscapeclan.models.ClanMember
 import com.blakdragon.petscapeclan.models.enums.Rank
 import com.blakdragon.petscapeclan.services.ClanMemberDAO
 import com.blakdragon.petscapeclan.services.UserDAO
@@ -39,67 +38,34 @@ class ClanMemberControllerTests {
     }
 
     @Test
-    fun addClanMemberAsAdminInvalidToken() {
-        assertThrows<ResponseStatusException> {
-            clanMemberController.addClanMemberAsAdmin("invalidToken", clanMemberAsAdminRequest(testUserLogins.user1.id!!))
-        }
-    }
-
-    @Test
-    fun addClanMemberAsAdminUserNotFound() {
-        assertThrows<ResponseStatusException> {
-            clanMemberController.addClanMemberAsAdmin(testUserLogins.admin.token!!, clanMemberAsAdminRequest("invalidId"))
-        }
-    }
-
-    @Test
-    fun addClanMemberAsAdminUnauthorized() {
-        assertThrows<ResponseStatusException> {
-            clanMemberController.addClanMemberAsAdmin(testUserLogins.user1.token!!, clanMemberAsAdminRequest(testUserLogins.user1.id!!))
-        }
-    }
-
-    @Test
-    fun addClanMemberAsAdmin() {
-        clanMemberController.addClanMemberAsAdmin(testUserLogins.admin.token!!, clanMemberAsAdminRequest(testUserLogins.user1.id!!))
-        assertEquals(1, clanMemberDAO.findAll().size)
-
-        clanMemberController.addClanMemberAsAdmin(testUserLogins.admin.token!!, clanMemberAsAdminRequest(testUserLogins.user1.id!!))
-        assertEquals(2, clanMemberDAO.findAll().size)
-    }
-
-    @Test
     fun addClanMemberInvalidToken() {
         assertThrows<ResponseStatusException> {
-            clanMemberController.addClanMember("invalidToken", clanMemberRequest())
+            clanMemberController.addClanMember("invalidToken", clanMemberAsAdminRequest())
+        }
+    }
+
+    @Test
+    fun addClanMemberUnauthorized() {
+        assertThrows<ResponseStatusException> {
+            clanMemberController.addClanMember(testUserLogins.user1.token!!, clanMemberAsAdminRequest())
         }
     }
 
     @Test
     fun addClanMember() {
-        clanMemberController.addClanMember(userToken = testUserLogins.user1.token!!, clanMemberRequest())
+        clanMemberController.addClanMember(testUserLogins.admin.token!!, clanMemberAsAdminRequest())
         assertEquals(1, clanMemberDAO.findAll().size)
+
+        clanMemberController.addClanMember(testUserLogins.admin.token!!, clanMemberAsAdminRequest())
+        assertEquals(2, clanMemberDAO.findAll().size)
     }
 
-    private fun clanMemberAsAdminRequest(userId: String): AddClanMemberAsAdminRequest {
-        return AddClanMemberAsAdminRequest(
-            userId = userId,
+    private fun clanMemberAsAdminRequest(): ClanMember {
+        return ClanMember(
             runescapeName = generateRandomString(12),
-            rank = Rank.Smiley,
+            rank = Rank.Bronze,
             joinDate = LocalDate.now(),
-            lastActivity = LocalDate.now(),
-            splitsM = 0,
             infernalCape = false,
-            pets = setOf(),
-            ironMan = false,
-            ironManItems = setOf()
-        )
-    }
-
-    private fun clanMemberRequest(): AddClanMemberRequest {
-        return AddClanMemberRequest(
-            runescapeName = generateRandomString(12),
-            ironMan = false
         )
     }
 }
