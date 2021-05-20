@@ -4,11 +4,10 @@ import com.blakdragon.petscapeclan.models.ClanMember
 import com.blakdragon.petscapeclan.services.ClanMemberService
 import com.blakdragon.petscapeclan.services.UserService
 import org.springframework.http.HttpStatus
-import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
 
-@Controller
+@RestController
 @RequestMapping("api/clanMembers")
 class ClanMemberController(
     private val userService: UserService,
@@ -26,17 +25,17 @@ class ClanMemberController(
         return clanMemberService.insert(request)
     }
 
+    @GetMapping
+    fun getClanMembers(@RequestHeader("Authorization") userToken: String): List<ClanMember> {
+        return clanMemberService.getAll()
+    }
+
     @GetMapping("/{id}")
     fun getClanMember(
         @RequestHeader("Authorization") userToken: String,
         @PathVariable("id") id: String
     ): ClanMember {
         return clanMemberService.getById(id) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Clan member not found")
-    }
-
-    @GetMapping
-    fun getClanMembers(@RequestHeader("Authorization") userToken: String): List<ClanMember> {
-        return clanMemberService.getAll()
     }
 
     @PutMapping
