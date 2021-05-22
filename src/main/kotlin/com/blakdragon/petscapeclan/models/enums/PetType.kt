@@ -1,6 +1,6 @@
 package com.blakdragon.petscapeclan.models.enums
 
-enum class Pet {
+enum class PetType {
     AbyssalOrphan,
     BabyMole,
     CallistoCub,
@@ -49,6 +49,6 @@ enum class Pet {
     PetPenanceQueen,
     Phoenix,
     TinyTempor,
-    Younllef,
+    Youngllef,
     Smolcano
 }

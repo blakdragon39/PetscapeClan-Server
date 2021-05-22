@@ -1,8 +1,10 @@
 package com.blakdragon.petscapeclan.controllers
 
 import com.blakdragon.petscapeclan.models.ClanMember
+import com.blakdragon.petscapeclan.models.ClanMemberPossiblePoints
 import com.blakdragon.petscapeclan.services.ClanMemberService
 import com.blakdragon.petscapeclan.services.UserService
+import com.blakdragon.petscapeclan.utils.possiblePoints
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
@@ -13,6 +15,17 @@ class ClanMemberController(
     private val userService: UserService,
     private val clanMemberService: ClanMemberService
 ) {
+
+    @GetMapping("/{id}/checkup")
+    fun checkClanMember(
+        @RequestHeader("Authorization") userToken: String,
+        @PathVariable("id") id: String
+    ): ClanMemberPossiblePoints {
+        val clanMember = clanMemberService.getById(id) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Clan member not found")
+        val possiblePoints = clanMember.possiblePoints()
+
+        return ClanMemberPossiblePoints(clanMember, possiblePoints)
+    }
 
     @PostMapping
     fun addClanMember(
