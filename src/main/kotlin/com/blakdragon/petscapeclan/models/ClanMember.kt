@@ -8,24 +8,20 @@ import java.time.LocalDate
 @Document
 class ClanMember(
     @Id var id: String? = null,
+    var runescapeName: String,
+    var rank: Rank,
+    var joinDate: LocalDate,
+    var bossKc: Int,
+    var pets: List<Pet>,
+    var achievements: List<Achievement>,
+    var points: Int
+)
+
+class ClanMemberRequest(
+    val id: String?,
     val runescapeName: String,
     val rank: Rank,
     val joinDate: LocalDate,
-    val bossKc: Int,
     val pets: List<Pet>,
-    val achievements: List<Achievement>,
-    val points: Int
+    val achievements: List<Achievement>
 )
-
-class ClanMemberPossiblePoints(
-    clanMember: ClanMember,
-    val possiblePoints: Int
-) {
-    val id = clanMember.id
-    val rank = clanMember.rank
-    val joinDate = clanMember.joinDate
-    val bossKc = clanMember.bossKc
-    val pets = clanMember.pets
-    val achievements = clanMember.achievements
-    val points = clanMember.points
-}
