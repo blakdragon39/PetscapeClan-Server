@@ -1,7 +1,7 @@
 package com.blakdragon.petscapeclan
 
 import com.blakdragon.petscapeclan.controllers.ClanMemberController
-import com.blakdragon.petscapeclan.models.ClanMember
+import com.blakdragon.petscapeclan.models.ClanMemberRequest
 import com.blakdragon.petscapeclan.models.enums.Rank
 import com.blakdragon.petscapeclan.services.ClanMemberDAO
 import com.blakdragon.petscapeclan.services.UserDAO
@@ -60,12 +60,14 @@ class ClanMemberControllerTests {
         assertEquals(2, clanMemberDAO.findAll().size)
     }
 
-    private fun clanMemberAsAdminRequest(): ClanMember {
-        return ClanMember(
+    private fun clanMemberAsAdminRequest(): ClanMemberRequest {
+        return ClanMemberRequest(
+            id = null,
             runescapeName = generateRandomString(12),
             rank = Rank.Bronze,
             joinDate = LocalDate.now(),
-            infernalCape = false,
+            pets = listOf(),
+            achievements = listOf()
         )
     }
 }
