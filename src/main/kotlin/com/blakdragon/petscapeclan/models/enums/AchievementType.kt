@@ -37,4 +37,5 @@ enum class AchievementType {
     ChampionCape,
     InfernalCape,
     XericsCape,
+    SinhazaShroud
 }
