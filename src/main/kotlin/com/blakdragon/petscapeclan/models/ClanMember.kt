@@ -11,6 +11,7 @@ class ClanMember(
     var runescapeName: String,
     var rank: Rank,
     var joinDate: LocalDate,
+    var lastSeen: LocalDate?,
     var bossKc: Int,
     var pets: List<Pet>,
     var achievements: List<Achievement>,

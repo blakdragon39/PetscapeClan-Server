@@ -34,4 +34,7 @@ class ClanMemberService(private val clanMemberDAO: ClanMemberDAO) : BasicCrud<St
             clanMemberDAO.delete(this)
         }
     }
+
+    fun getByIdOrThrow(id: String): ClanMember =
+        clanMemberDAO.findByIdOrNull(id) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Clan member not found")
 }

@@ -8,6 +8,7 @@ import com.blakdragon.petscapeclan.utils.getPossiblePoints
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
+import java.time.LocalDate
 
 @RestController
 @RequestMapping("api/clanMembers")
@@ -30,6 +31,7 @@ class ClanMemberController(
             runescapeName = request.runescapeName,
             rank = request.rank,
             joinDate = request.joinDate,
+            lastSeen = LocalDate.now(),
             bossKc = wiseOldMan?.totalBossKc() ?: 0,
             pets = request.pets,
             achievements = request.achievements,
@@ -46,10 +48,9 @@ class ClanMemberController(
 
     @GetMapping("/{id}")
     fun getClanMember(
-        @RequestHeader("Authorization") userToken: String,
         @PathVariable("id") id: String
     ): ClanMember {
-        return clanMemberService.getById(id) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Clan member not found")
+        return clanMemberService.getByIdOrThrow(id)
     }
 
     @PutMapping
@@ -58,7 +59,7 @@ class ClanMemberController(
         @RequestBody request: ClanMemberRequest
     ): ClanMember {
         if (request.id == null) throw ResponseStatusException(HttpStatus.NOT_FOUND, "Clan member not found")
-        val clanMember = clanMemberService.getById(request.id) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Clan member not found")
+        val clanMember = clanMemberService.getByIdOrThrow(request.id)
 
         val wiseOldManPlayer = getWiseOldMan(request.runescapeName)
 
@@ -69,6 +70,35 @@ class ClanMemberController(
         clanMember.achievements = request.achievements
         clanMember.bossKc = wiseOldManPlayer?.totalBossKc() ?: 0
         clanMember.points = getPossiblePoints(wiseOldManPlayer, request.joinDate, request.pets, request.achievements)
+
+        return clanMemberService.update(clanMember)
+    }
+
+    @PutMapping("/{id}")
+    fun pingClanMember(
+        @RequestHeader("Authorization") userToken: String,
+        @PathVariable("id") id: String
+    ): ClanMember {
+        val clanMember = clanMemberService.getByIdOrThrow(id)
+        val wiseOldManPlayer = getWiseOldMan(clanMember.runescapeName)
+
+        clanMember.bossKc = wiseOldManPlayer?.totalBossKc() ?: 0
+        clanMember.points = getPossiblePoints(wiseOldManPlayer, clanMember.joinDate, clanMember.pets, clanMember.achievements)
+
+        return clanMemberService.update(clanMember)
+    }
+
+    @PutMapping("/{id}/lastSeen")
+    fun updateLastSeen(
+        @RequestHeader("Authorization") userToken: String,
+        @PathVariable("id") id: String
+    ): ClanMember {
+        val clanMember = clanMemberService.getByIdOrThrow(id)
+        val wiseOldManPlayer = getWiseOldMan(clanMember.runescapeName)
+
+        clanMember.bossKc = wiseOldManPlayer?.totalBossKc() ?: 0
+        clanMember.points = getPossiblePoints(wiseOldManPlayer, clanMember.joinDate, clanMember.pets, clanMember.achievements)
+        clanMember.lastSeen = LocalDate.now()
 
         return clanMemberService.update(clanMember)
     }
