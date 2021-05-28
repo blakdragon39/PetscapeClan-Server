@@ -35,7 +35,8 @@ class ClanMemberController(
             bossKc = wiseOldMan?.totalBossKc() ?: 0,
             pets = request.pets,
             achievements = request.achievements,
-            points = getPossiblePoints(wiseOldMan, request.joinDate, request.pets, request.achievements)
+            points = getPossiblePoints(wiseOldMan, request.joinDate, request.pets, request.achievements),
+            alts = request.alts
         )
 
         return clanMemberService.insert(clanMember)
@@ -70,6 +71,7 @@ class ClanMemberController(
         clanMember.achievements = request.achievements
         clanMember.bossKc = wiseOldManPlayer?.totalBossKc() ?: 0
         clanMember.points = getPossiblePoints(wiseOldManPlayer, request.joinDate, request.pets, request.achievements)
+        clanMember.alts = request.alts
 
         return clanMemberService.update(clanMember)
     }
