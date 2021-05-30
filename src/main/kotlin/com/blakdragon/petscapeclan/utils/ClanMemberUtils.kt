@@ -18,7 +18,6 @@ const val MAX_POINTS_TIME = 24
 val wiseOldManClient: WebClient by lazy { WebClient.create("https://api.wiseoldman.net/") }
 
 fun getWiseOldMan(runescapeName: String): WiseOldManPlayer? {
-    //todo catch WebClientResponseException
     try {
         return wiseOldManClient
             .get()

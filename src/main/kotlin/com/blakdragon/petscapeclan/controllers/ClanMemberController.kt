@@ -43,7 +43,7 @@ class ClanMemberController(
     }
 
     @GetMapping
-    fun getClanMembers(@RequestHeader("Authorization") userToken: String): List<ClanMember> {
+    fun getClanMembers(): List<ClanMember> {
         return clanMemberService.getAll()
     }
 
@@ -52,6 +52,14 @@ class ClanMemberController(
         @PathVariable("id") id: String
     ): ClanMember {
         return clanMemberService.getByIdOrThrow(id)
+    }
+
+    @GetMapping("/runescapeName/{runescapeName}")
+    fun getClanMemberByRunescapeName(
+        @PathVariable("runescapeName") runescapeName: String
+    ): ClanMember {
+        val result = clanMemberService.getByRunescapeName(runescapeName)
+        return if (result.isNotEmpty()) result[0] else throw ResponseStatusException(HttpStatus.NOT_FOUND, "No clan member found with that name")
     }
 
     @PutMapping
