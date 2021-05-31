@@ -10,5 +10,5 @@ interface UserDAO : MongoRepository<User, String> {
 }
 
 interface ClanMemberDAO : MongoRepository<ClanMember, String> {
-    fun findByRunescapeName(runescapeName: String): List<ClanMember>
+    fun findByRunescapeNameIgnoreCase(runescapeName: String): List<ClanMember>
 }
