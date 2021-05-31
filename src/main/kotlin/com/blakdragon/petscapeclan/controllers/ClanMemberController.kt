@@ -84,7 +84,7 @@ class ClanMemberController(
         return clanMemberService.update(clanMember)
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{id}/update")
     fun pingClanMember(
         @RequestHeader("Authorization") userToken: String,
         @PathVariable("id") id: String
