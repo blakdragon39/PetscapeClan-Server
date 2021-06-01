@@ -5,6 +5,7 @@ import com.blakdragon.petscapeclan.services.ClanMemberService
 import com.blakdragon.petscapeclan.services.UserService
 import com.blakdragon.petscapeclan.utils.getWiseOldMan
 import com.blakdragon.petscapeclan.utils.getPossiblePoints
+import org.springframework.data.mongodb.repository.Query
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
@@ -54,9 +55,9 @@ class ClanMemberController(
         return clanMemberService.getByIdOrThrow(id)
     }
 
-    @GetMapping("/runescapeName/{runescapeName}")
+    @GetMapping("/runescapeName")
     fun getClanMemberByRunescapeName(
-        @PathVariable("runescapeName") runescapeName: String
+        @RequestParam("runescapeName") runescapeName: String
     ): ClanMember {
         val result = clanMemberService.getByRunescapeName(runescapeName)
         return if (result.isNotEmpty()) result[0] else throw ResponseStatusException(HttpStatus.NOT_FOUND, "No clan member found with that name")
