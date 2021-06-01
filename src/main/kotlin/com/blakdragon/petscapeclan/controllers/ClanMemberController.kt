@@ -23,8 +23,7 @@ class ClanMemberController(
         @RequestHeader("Authorization") userToken: String,
         @RequestBody request: ClanMemberRequest
     ): ClanMember {
-        val requestUser = userService.getByToken(userToken) ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid token")
-        if (!requestUser.isAdmin) throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "Request unauthorized")
+        userService.getAdminByTokenOrThrow(userToken)
 
         val wiseOldMan = getWiseOldMan(request.runescapeName)
 
@@ -68,6 +67,8 @@ class ClanMemberController(
         @RequestHeader("Authorization") userToken: String,
         @RequestBody request: ClanMemberRequest
     ): ClanMember {
+        userService.getAdminByTokenOrThrow(userToken)
+
         if (request.id == null) throw ResponseStatusException(HttpStatus.NOT_FOUND, "Clan member not found")
         val clanMember = clanMemberService.getByIdOrThrow(request.id)
 
@@ -90,6 +91,8 @@ class ClanMemberController(
         @RequestHeader("Authorization") userToken: String,
         @PathVariable("id") id: String
     ): ClanMember {
+        userService.getAdminByTokenOrThrow(userToken)
+
         val clanMember = clanMemberService.getByIdOrThrow(id)
         val wiseOldManPlayer = getWiseOldMan(clanMember.runescapeName)
 
@@ -104,6 +107,8 @@ class ClanMemberController(
         @RequestHeader("Authorization") userToken: String,
         @PathVariable("id") id: String
     ): ClanMember {
+        userService.getAdminByTokenOrThrow(userToken)
+
         val clanMember = clanMemberService.getByIdOrThrow(id)
         val wiseOldManPlayer = getWiseOldMan(clanMember.runescapeName)
 
@@ -119,6 +124,7 @@ class ClanMemberController(
         @RequestHeader("Authorization") userToken: String,
         @PathVariable("id") id: String
     ) {
+        userService.getAdminByTokenOrThrow(userToken)
         clanMemberService.deleteById(id) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Clan member not found")
     }
 }

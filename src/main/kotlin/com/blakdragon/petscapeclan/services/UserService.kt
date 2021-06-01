@@ -47,4 +47,11 @@ class UserService(private val userDAO: UserDAO) : BasicCrud<String, User> {
     fun getByEmail(email: String): User? = userDAO.findByEmail(email)
 
     fun getByToken(token: String): User? = userDAO.findByToken(token)
+
+    fun getAdminByTokenOrThrow(token: String): User {
+        val user = getByToken(token) ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid token")
+        if (!user.isAdmin) throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "Request unauthorized")
+
+        return user
+    }
 }
