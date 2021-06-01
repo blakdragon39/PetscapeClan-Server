@@ -59,7 +59,8 @@ class ClanMemberController(
         @RequestParam("runescapeName") runescapeName: String
     ): ClanMember {
         val result = clanMemberService.getByRunescapeName(runescapeName)
-        return if (result.isNotEmpty()) result[0] else throw ResponseStatusException(HttpStatus.NOT_FOUND, "No clan member found with that name")
+        if (result.isEmpty()) throw ResponseStatusException(HttpStatus.NOT_FOUND, "No clan member found with that name")
+        return result[0]
     }
 
     @PutMapping
