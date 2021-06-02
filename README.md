@@ -1,3 +1,5 @@
+https://petscape.cc:8080/swagger-ui.html
+
 ```
 TODO: restart script
 - gradlew build
