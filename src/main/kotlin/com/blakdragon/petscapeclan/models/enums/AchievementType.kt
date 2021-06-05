@@ -11,6 +11,7 @@ enum class AchievementType {
 
     TransmogDarkAcorn,
     TransmogMetamorphicDust,
+    TransmogSanguineDust,
     Transmog6Jads,
     TransmogBlueHeron,
     TransmogSraracha,
