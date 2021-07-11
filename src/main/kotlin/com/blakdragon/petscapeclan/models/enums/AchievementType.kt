@@ -6,7 +6,7 @@ enum class AchievementType {
     MaxCape,
     Base70Stats,
     Base80Stats,
-    Base90Stats,
+    Base90Stats,    
     Combat126,
 
     TransmogDarkAcorn,
@@ -15,6 +15,7 @@ enum class AchievementType {
     Transmog6Jads,
     TransmogBlueHeron,
     TransmogSraracha,
+    TransmogParasiticEgg,
 
     Clues600Beginner,
     Clues500Easy,
