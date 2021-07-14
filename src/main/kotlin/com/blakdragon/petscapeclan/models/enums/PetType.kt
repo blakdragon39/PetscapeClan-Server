@@ -52,5 +52,13 @@ enum class PetType(
     Phoenix("Phoenix"),
     TinyTempor("Tiny Tempor"),
     Youngllef("Youngllef"),
-    Smolcano("Smolcano")
+    Smolcano("Smolcano");
+
+    fun toResponse(): PetTypeResponse = PetTypeResponse(this)
+}
+
+class PetTypeResponse(
+    val type: PetType
+) {
+    val label: String = type.label
 }

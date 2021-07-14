@@ -1,6 +1,7 @@
 package com.blakdragon.petscapeclan.models
 
 import com.blakdragon.petscapeclan.models.enums.Rank
+import com.blakdragon.petscapeclan.models.enums.RankResponse
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 import java.time.LocalDate
@@ -21,7 +22,7 @@ class ClanMember(
     fun toResponse(): ClanMemberResponse = ClanMemberResponse(
         id = id,
         runescapeName = runescapeName,
-        rank = rank,
+        rank = rank.toResponse(),
         joinDate = joinDate,
         lastSeen = lastSeen,
         bossKc = bossKc,
@@ -45,7 +46,7 @@ class ClanMemberRequest(
 class ClanMemberResponse(
     var id: String? = null,
     var runescapeName: String,
-    var rank: Rank,
+    var rank: RankResponse,
     var joinDate: LocalDate,
     var lastSeen: LocalDate?,
     var bossKc: Int,

@@ -41,5 +41,13 @@ enum class AchievementType(
     ChampionCape("Champion's Cape"),
     InfernalCape("Infernal Cape"),
     XericsCape("Xerics Cape"),
-    SinhazaShroud("Sinhaza Shroud")
+    SinhazaShroud("Sinhaza Shroud");
+
+    fun toResponse(): AchievementTypeResponse = AchievementTypeResponse(this)
+}
+
+class AchievementTypeResponse(
+    val type: AchievementType
+) {
+    val label: String = type.label
 }
