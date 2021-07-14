@@ -17,7 +17,20 @@ class ClanMember(
     var achievements: List<Achievement>,
     var points: Int,
     var alts: List<String> = listOf()
-)
+) {
+    fun toResponse(): ClanMemberResponse = ClanMemberResponse(
+        id = id,
+        runescapeName = runescapeName,
+        rank = rank,
+        joinDate = joinDate,
+        lastSeen = lastSeen,
+        bossKc = bossKc,
+        pets = pets.map { it.toResponse() },
+        achievements = achievements.map { it.toResponse() },
+        points = points,
+        alts = alts
+    )
+}
 
 class ClanMemberRequest(
     val id: String?,
@@ -27,4 +40,17 @@ class ClanMemberRequest(
     val pets: List<Pet>,
     val achievements: List<Achievement>,
     val alts: List<String>
+)
+
+class ClanMemberResponse(
+    var id: String? = null,
+    var runescapeName: String,
+    var rank: Rank,
+    var joinDate: LocalDate,
+    var lastSeen: LocalDate?,
+    var bossKc: Int,
+    var pets: List<PetResponse>,
+    var achievements: List<AchievementResponse>,
+    var points: Int,
+    var alts: List<String> = listOf()
 )

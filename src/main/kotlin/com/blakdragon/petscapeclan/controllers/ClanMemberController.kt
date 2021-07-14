@@ -5,7 +5,6 @@ import com.blakdragon.petscapeclan.services.ClanMemberService
 import com.blakdragon.petscapeclan.services.UserService
 import com.blakdragon.petscapeclan.utils.getWiseOldMan
 import com.blakdragon.petscapeclan.utils.getPossiblePoints
-import org.springframework.data.mongodb.repository.Query
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
@@ -22,7 +21,7 @@ class ClanMemberController(
     fun addClanMember(
         @RequestHeader("Authorization") userToken: String,
         @RequestBody request: ClanMemberRequest
-    ): ClanMember {
+    ): ClanMemberResponse {
         userService.getAdminByTokenOrThrow(userToken)
 
         val wiseOldMan = getWiseOldMan(request.runescapeName)
@@ -39,35 +38,35 @@ class ClanMemberController(
             alts = request.alts
         )
 
-        return clanMemberService.insert(clanMember)
+        return clanMemberService.insert(clanMember).toResponse()
     }
 
     @GetMapping
-    fun getClanMembers(): List<ClanMember> {
-        return clanMemberService.getAll()
+    fun getClanMembers(): List<ClanMemberResponse> {
+        return clanMemberService.getAll().map { it.toResponse() }
     }
 
     @GetMapping("/{id}")
     fun getClanMember(
         @PathVariable("id") id: String
-    ): ClanMember {
-        return clanMemberService.getByIdOrThrow(id)
+    ): ClanMemberResponse {
+        return clanMemberService.getByIdOrThrow(id).toResponse()
     }
 
     @GetMapping("/runescapeName")
     fun getClanMemberByRunescapeName(
         @RequestParam("runescapeName") runescapeName: String
-    ): ClanMember {
+    ): ClanMemberResponse {
         val result = clanMemberService.getByRunescapeName(runescapeName)
         if (result.isEmpty()) throw ResponseStatusException(HttpStatus.NOT_FOUND, "No clan member found with that name")
-        return result[0]
+        return result[0].toResponse()
     }
 
     @PutMapping
     fun updateClanMember(
         @RequestHeader("Authorization") userToken: String,
         @RequestBody request: ClanMemberRequest
-    ): ClanMember {
+    ): ClanMemberResponse {
         userService.getAdminByTokenOrThrow(userToken)
 
         if (request.id == null) throw ResponseStatusException(HttpStatus.NOT_FOUND, "Clan member not found")
@@ -84,14 +83,14 @@ class ClanMemberController(
         clanMember.points = getPossiblePoints(wiseOldManPlayer, request.joinDate, request.pets, request.achievements)
         clanMember.alts = request.alts
 
-        return clanMemberService.update(clanMember)
+        return clanMemberService.update(clanMember).toResponse()
     }
 
     @PutMapping("/{id}/update")
     fun pingClanMember(
         @RequestHeader("Authorization") userToken: String,
         @PathVariable("id") id: String
-    ): ClanMember {
+    ): ClanMemberResponse {
         userService.getAdminByTokenOrThrow(userToken)
 
         val clanMember = clanMemberService.getByIdOrThrow(id)
@@ -100,14 +99,14 @@ class ClanMemberController(
         clanMember.bossKc = wiseOldManPlayer?.totalBossKc() ?: 0
         clanMember.points = getPossiblePoints(wiseOldManPlayer, clanMember.joinDate, clanMember.pets, clanMember.achievements)
 
-        return clanMemberService.update(clanMember)
+        return clanMemberService.update(clanMember).toResponse()
     }
 
     @PutMapping("/{id}/lastSeen")
     fun updateLastSeen(
         @RequestHeader("Authorization") userToken: String,
         @PathVariable("id") id: String
-    ): ClanMember {
+    ): ClanMemberResponse {
         userService.getAdminByTokenOrThrow(userToken)
 
         val clanMember = clanMemberService.getByIdOrThrow(id)
@@ -117,7 +116,7 @@ class ClanMemberController(
         clanMember.points = getPossiblePoints(wiseOldManPlayer, clanMember.joinDate, clanMember.pets, clanMember.achievements)
         clanMember.lastSeen = LocalDate.now()
 
-        return clanMemberService.update(clanMember)
+        return clanMemberService.update(clanMember).toResponse()
     }
 
     @DeleteMapping("/{id}")
