@@ -3,6 +3,7 @@ package com.blakdragon.petscapeclan.models
 import com.blakdragon.petscapeclan.models.enums.AchievementType
 import com.blakdragon.petscapeclan.models.enums.Rank
 import com.blakdragon.petscapeclan.models.enums.RankResponse
+import com.blakdragon.petscapeclan.utils.determinePossibleRank
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 import java.time.LocalDate
@@ -30,7 +31,8 @@ class ClanMember(
         pets = pets.map { it.toResponse() },
         achievements = achievements.map { it.toResponse() },
         points = points,
-        alts = alts
+        alts = alts,
+        possibleRank = determinePossibleRank(this).toResponse()
     )
 
     fun hasAchievement(type: AchievementType): Boolean = achievements.any { it.type == type }
@@ -47,14 +49,15 @@ class ClanMemberRequest(
 )
 
 class ClanMemberResponse(
-    var id: String? = null,
-    var runescapeName: String,
-    var rank: RankResponse,
-    var joinDate: LocalDate,
-    var lastSeen: LocalDate?,
-    var bossKc: Int,
-    var pets: List<PetResponse>,
-    var achievements: List<AchievementResponse>,
-    var points: Int,
-    var alts: List<String> = listOf()
+    val id: String? = null,
+    val runescapeName: String,
+    val rank: RankResponse,
+    val joinDate: LocalDate,
+    val lastSeen: LocalDate?,
+    val bossKc: Int,
+    val pets: List<PetResponse>,
+    val achievements: List<AchievementResponse>,
+    val points: Int,
+    val alts: List<String> = listOf(),
+    val possibleRank: RankResponse
 )

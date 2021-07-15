@@ -4,6 +4,7 @@ import com.blakdragon.petscapeclan.models.Achievement
 import com.blakdragon.petscapeclan.models.ClanMember
 import com.blakdragon.petscapeclan.models.WiseOldManPlayer
 import com.blakdragon.petscapeclan.models.enums.AchievementType
+import com.blakdragon.petscapeclan.models.enums.Rank
 import org.springframework.http.HttpStatus
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.WebClientResponseException
@@ -25,6 +26,11 @@ fun updateClanMemberStats(clanMember: ClanMember) {
     clanMember.bossKc = wiseOldManPlayer.totalBossKc()
     clanMember.achievements = addAchievements(clanMember, wiseOldManPlayer)
     clanMember.points = addUpPoints(clanMember)
+}
+
+fun determinePossibleRank(clanMember: ClanMember): Rank {
+    return listOf(Rank.Dragon, Rank.Rune, Rank.Adamant, Rank.Mithril, Rank.Gold, Rank.Steel, Rank.Iron, Rank.Bronze)
+        .firstOrNull { it.points <= clanMember.points } ?: Rank.Bronze
 }
 
 private fun getWiseOldMan(runescapeName: String): WiseOldManPlayer {
