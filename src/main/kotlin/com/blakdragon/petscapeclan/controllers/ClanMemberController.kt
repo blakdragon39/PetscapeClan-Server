@@ -3,8 +3,7 @@ package com.blakdragon.petscapeclan.controllers
 import com.blakdragon.petscapeclan.models.*
 import com.blakdragon.petscapeclan.services.ClanMemberService
 import com.blakdragon.petscapeclan.services.UserService
-import com.blakdragon.petscapeclan.utils.getWiseOldMan
-import com.blakdragon.petscapeclan.utils.getPossiblePoints
+import com.blakdragon.petscapeclan.utils.updateClanMemberStats
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
@@ -24,19 +23,19 @@ class ClanMemberController(
     ): ClanMemberResponse {
         userService.getAdminByTokenOrThrow(userToken)
 
-        val wiseOldMan = getWiseOldMan(request.runescapeName)
-
         val clanMember = ClanMember(
             runescapeName = request.runescapeName,
             rank = request.rank,
             joinDate = request.joinDate,
             lastSeen = LocalDate.now(),
-            bossKc = wiseOldMan?.totalBossKc() ?: 0,
+            bossKc = 0,
             pets = request.pets,
             achievements = request.achievements,
-            points = getPossiblePoints(wiseOldMan, request.joinDate, request.pets, request.achievements),
+            points = 0,
             alts = request.alts
         )
+
+        updateClanMemberStats(clanMember)
 
         return clanMemberService.insert(clanMember).toResponse()
     }
@@ -72,16 +71,14 @@ class ClanMemberController(
         if (request.id == null) throw ResponseStatusException(HttpStatus.NOT_FOUND, "Clan member not found")
         val clanMember = clanMemberService.getByIdOrThrow(request.id)
 
-        val wiseOldManPlayer = getWiseOldMan(request.runescapeName)
-
         clanMember.runescapeName = request.runescapeName
         clanMember.rank = request.rank
         clanMember.joinDate = request.joinDate
         clanMember.pets = request.pets
         clanMember.achievements = request.achievements
-        clanMember.bossKc = wiseOldManPlayer?.totalBossKc() ?: 0
-        clanMember.points = getPossiblePoints(wiseOldManPlayer, request.joinDate, request.pets, request.achievements)
         clanMember.alts = request.alts
+
+        updateClanMemberStats(clanMember)
 
         return clanMemberService.update(clanMember).toResponse()
     }
@@ -94,11 +91,7 @@ class ClanMemberController(
         userService.getAdminByTokenOrThrow(userToken)
 
         val clanMember = clanMemberService.getByIdOrThrow(id)
-        val wiseOldManPlayer = getWiseOldMan(clanMember.runescapeName)
-
-        clanMember.bossKc = wiseOldManPlayer?.totalBossKc() ?: 0
-        clanMember.points = getPossiblePoints(wiseOldManPlayer, clanMember.joinDate, clanMember.pets, clanMember.achievements)
-
+        updateClanMemberStats(clanMember)
         return clanMemberService.update(clanMember).toResponse()
     }
 
@@ -110,11 +103,8 @@ class ClanMemberController(
         userService.getAdminByTokenOrThrow(userToken)
 
         val clanMember = clanMemberService.getByIdOrThrow(id)
-        val wiseOldManPlayer = getWiseOldMan(clanMember.runescapeName)
-
-        clanMember.bossKc = wiseOldManPlayer?.totalBossKc() ?: 0
-        clanMember.points = getPossiblePoints(wiseOldManPlayer, clanMember.joinDate, clanMember.pets, clanMember.achievements)
         clanMember.lastSeen = LocalDate.now()
+        updateClanMemberStats(clanMember)
 
         return clanMemberService.update(clanMember).toResponse()
     }

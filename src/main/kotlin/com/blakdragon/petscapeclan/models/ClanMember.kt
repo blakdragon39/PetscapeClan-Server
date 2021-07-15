@@ -1,5 +1,6 @@
 package com.blakdragon.petscapeclan.models
 
+import com.blakdragon.petscapeclan.models.enums.AchievementType
 import com.blakdragon.petscapeclan.models.enums.Rank
 import com.blakdragon.petscapeclan.models.enums.RankResponse
 import org.springframework.data.annotation.Id
@@ -31,6 +32,8 @@ class ClanMember(
         points = points,
         alts = alts
     )
+
+    fun hasAchievement(type: AchievementType): Boolean = achievements.any { it.type == type }
 }
 
 class ClanMemberRequest(

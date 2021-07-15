@@ -48,17 +48,17 @@ enum class Rank(
     Admin(
         label = "Admin",
         order = 8,
-        points = Int.MAX_VALUE
+        points = 0
     ),
     DeputyOwner(
         label = "Deputy Owner",
         order = 9,
-        points = Int.MAX_VALUE
+        points = 0
     ),
     Owner(
         label = "Owner",
         order = 10,
-        points = Int.MAX_VALUE
+        points = 0
     );
 
     fun toResponse(): RankResponse = RankResponse(this)

@@ -1,5 +1,6 @@
 package com.blakdragon.petscapeclan.models
 
+import com.blakdragon.petscapeclan.utils.expToLevel
 import java.time.LocalDateTime
 
 class WiseOldManPlayer(
@@ -42,6 +43,7 @@ class WiseOldManPlayer(
             latestSnapshot.kril_tsutsaroth,
             latestSnapshot.mimic,
             latestSnapshot.nightmare,
+            latestSnapshot.phosanis_nightmare,
             latestSnapshot.obor,
             latestSnapshot.sarachnis,
             latestSnapshot.scorpia,
@@ -62,6 +64,38 @@ class WiseOldManPlayer(
             latestSnapshot.zulrah
         ).sumOf { it.kills }
     }
+
+    fun allSkills(): List<WiseOldManSkill> = listOf(
+        latestSnapshot.attack,
+        latestSnapshot.defence,
+        latestSnapshot.strength,
+        latestSnapshot.hitpoints,
+        latestSnapshot.ranged,
+        latestSnapshot.prayer,
+        latestSnapshot.magic,
+        latestSnapshot.cooking,
+        latestSnapshot.woodcutting,
+        latestSnapshot.fletching,
+        latestSnapshot.fishing,
+        latestSnapshot.firemaking,
+        latestSnapshot.crafting,
+        latestSnapshot.smithing,
+        latestSnapshot.mining,
+        latestSnapshot.herblore,
+        latestSnapshot.agility,
+        latestSnapshot.thieving,
+        latestSnapshot.slayer,
+        latestSnapshot.farming,
+        latestSnapshot.runecrafting,
+        latestSnapshot.hunter,
+        latestSnapshot.construction
+    )
+
+    fun totalSkillLevel(): Int = allSkills().sumOf { it.experience.expToLevel() }
+
+    fun anyExpOver(amount: Int): Boolean = allSkills().any { it.experience >= amount }
+
+    fun allSkillsOver(level: Int): Boolean = allSkills().all { it.experience.expToLevel() >= level }
 }
 
 class WiseOldManSnapShot(
@@ -118,6 +152,7 @@ class WiseOldManSnapShot(
     val kril_tsutsaroth: WiseOldManBoss,
     val mimic: WiseOldManBoss,
     val nightmare: WiseOldManBoss,
+    val phosanis_nightmare: WiseOldManBoss,
     val obor: WiseOldManBoss,
     val sarachnis: WiseOldManBoss,
     val scorpia: WiseOldManBoss,
@@ -136,6 +171,13 @@ class WiseOldManSnapShot(
     val wintertodt: WiseOldManBoss,
     val zalcano: WiseOldManBoss,
     val zulrah: WiseOldManBoss,
+
+    val clue_scrolls_beginner: WiseOldManClue,
+    val clue_scrolls_easy: WiseOldManClue,
+    val clue_scrolls_medium: WiseOldManClue,
+    val clue_scrolls_hard: WiseOldManClue,
+    val clue_scrolls_elite: WiseOldManClue,
+    val clue_scrolls_master: WiseOldManClue
 )
 
 class WiseOldManSkill(
@@ -148,4 +190,9 @@ class WiseOldManBoss(
     val rank: Int,
     val kills: Int,
     val ehb: Double
+)
+
+class WiseOldManClue(
+    val rank: Int,
+    val score: Int
 )
