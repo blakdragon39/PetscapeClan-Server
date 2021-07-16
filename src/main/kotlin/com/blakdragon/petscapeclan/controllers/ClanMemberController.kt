@@ -109,6 +109,23 @@ class ClanMemberController(
         return clanMemberService.update(clanMember).toResponse()
     }
 
+    @PutMapping("/lastSeen")
+    fun updateLastSeenBulk(
+        @RequestHeader("Authorization") userToken: String,
+        @RequestBody request: List<String>
+    ): List<ClanMemberResponse> {
+        userService.getAdminByTokenOrThrow(userToken)
+
+        request.forEach { id ->
+            val clanMember = clanMemberService.getByIdOrThrow(id)
+            clanMember.lastSeen = LocalDate.now()
+            updateClanMemberStats(clanMember) //this might hit WiseOldMan too many times if their are a lot of clan members in this request
+            clanMemberService.update(clanMember)
+        }
+
+        return clanMemberService.getAll().map { it.toResponse() }
+    }
+
     @DeleteMapping("/{id}")
     fun deleteClanMember(
         @RequestHeader("Authorization") userToken: String,

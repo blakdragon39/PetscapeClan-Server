@@ -5,6 +5,7 @@ import com.blakdragon.petscapeclan.models.ClanMember
 import com.blakdragon.petscapeclan.models.WiseOldManPlayer
 import com.blakdragon.petscapeclan.models.enums.AchievementType
 import com.blakdragon.petscapeclan.models.enums.Rank
+import org.springframework.core.codec.DecodingException
 import org.springframework.http.HttpStatus
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.WebClientResponseException
@@ -41,7 +42,12 @@ private fun getWiseOldMan(runescapeName: String): WiseOldManPlayer {
             .retrieve()
             .toEntity(WiseOldManPlayer::class.java)
             .block()
-            ?.body ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Wise Old Man Error: response body null")
+            ?.body ?: throw ResponseStatusException(
+            HttpStatus.NOT_FOUND,
+            "Wise Old Man Error: response body null"
+        )
+    } catch (e: DecodingException) {
+        throw ResponseStatusException(HttpStatus.NOT_FOUND, "Hiscores data not found for $runescapeName")
     } catch (e: WebClientResponseException) {
         throw ResponseStatusException(e.statusCode, "Wise Old Man error: ${e.responseBodyAsString}")
     }
