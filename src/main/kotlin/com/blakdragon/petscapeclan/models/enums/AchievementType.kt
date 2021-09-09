@@ -11,6 +11,11 @@ enum class AchievementType(
     Base90Stats("Base 90 Stats"),
     Combat126("126 Combat"),
 
+    CombatAchievementsEasyMedHard("Easy, Medium & Hard Combat Achievements"),
+    CombatAchievementsElite("Elite Combat Achievements"),
+    CombatAchievementsMaster("Master Combat Achievements"),
+    CombatAchievementsGrandmaster("Grandmaster Combat Achievements"),
+
     TransmogDarkAcorn("Dark Acorn Squirrel Transmog"),
     TransmogMetamorphicDust("Metamorphic Dust Olmlet Transmog"),
     TransmogSanguineDust("Sanguine Dust Verzik Trasmog"),
@@ -41,7 +46,7 @@ enum class AchievementType(
     ChampionCape("Champion's Cape"),
     InfernalCape("Infernal Cape"),
     XericsCape("Xerics Cape"),
-    SinhazaShroud("Sinhaza Shroud");
+    SinhazaShroud("Sinhaza Shroud"), ;
 
     fun toResponse(): AchievementTypeResponse = AchievementTypeResponse(this)
 }

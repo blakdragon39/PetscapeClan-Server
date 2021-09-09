@@ -85,11 +85,8 @@ class ClanMemberController(
 
     @PutMapping("/{id}/update")
     fun pingClanMember(
-        @RequestHeader("Authorization") userToken: String,
         @PathVariable("id") id: String
     ): ClanMemberResponse {
-        userService.getAdminByTokenOrThrow(userToken)
-
         val clanMember = clanMemberService.getByIdOrThrow(id)
         updateClanMemberStats(clanMember)
         return clanMemberService.update(clanMember).toResponse()
