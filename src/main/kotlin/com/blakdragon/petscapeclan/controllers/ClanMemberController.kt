@@ -22,6 +22,7 @@ class ClanMemberController(
         @RequestBody request: ClanMemberRequest
     ): ClanMemberResponse {
         userService.getAdminByTokenOrThrow(userToken)
+        //todo check rsn for duplicates
 
         val clanMember = ClanMember(
             runescapeName = request.runescapeName,
