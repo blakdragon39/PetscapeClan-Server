@@ -1,5 +1,6 @@
 package com.blakdragon.petscapeclan.models
 
+import com.blakdragon.petscapeclan.controllers.responses.BingoGameIdResponse
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 
@@ -35,6 +36,8 @@ class BingoGame(
     }
 
     fun toResponse(): BingoGameResponse = BingoGameResponse(this)
+
+    fun toIdResponse(): BingoGameIdResponse = BingoGameIdResponse(id, name)
 }
 
 @Suppress("unused")
