@@ -34,6 +34,9 @@ class BingoService(private val bingoGameDAO: BingoGameDAO) : BasicCrud<String, B
             bingoGameDAO.delete(this)
         }
     }
+
+    fun getByIdOrThrow(id: String): BingoGame =
+        bingoGameDAO.findByIdOrNull(id) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Bingo game not found")
 }
 
 

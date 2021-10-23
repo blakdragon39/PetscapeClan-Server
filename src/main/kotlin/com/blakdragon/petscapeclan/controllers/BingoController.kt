@@ -1,11 +1,9 @@
 package com.blakdragon.petscapeclan.controllers
 
 import com.blakdragon.petscapeclan.controllers.requests.CustomBingoGameRequest
+import com.blakdragon.petscapeclan.controllers.requests.UsernameRequest
 import com.blakdragon.petscapeclan.controllers.responses.BingoGameIdResponse
-import com.blakdragon.petscapeclan.models.BingoGame
-import com.blakdragon.petscapeclan.models.BingoGameResponse
-import com.blakdragon.petscapeclan.models.BingoGameType
-import com.blakdragon.petscapeclan.models.BingoSquare
+import com.blakdragon.petscapeclan.models.*
 import com.blakdragon.petscapeclan.services.BingoService
 import com.blakdragon.petscapeclan.utils.BINGO_NUM_SQUARES
 import org.springframework.http.HttpStatus
@@ -56,5 +54,27 @@ class BingoController(
         }
 
         return bingoService.insert(game).toResponse()
+    }
+
+    @PostMapping("/{id}")
+    fun addBingoCard(
+        @PathVariable("id") id: String,
+        @RequestBody request: UsernameRequest
+    ) : BingoCard {
+        val game = bingoService.getByIdOrThrow(id)
+
+        if (game.cards.any { it.username.equals(request.username, ignoreCase = true) }) {
+            throw ResponseStatusException(HttpStatus.FORBIDDEN, "Card already exists for that user in this game")
+        }
+
+        val card = BingoCard(
+            username = request.username,
+            squares = game.parentCard ?: emptyList() //todo BingoUtils.generateSquares()
+        )
+
+        game.cards.add(card)
+        bingoService.update(game)
+
+        return card
     }
 }
