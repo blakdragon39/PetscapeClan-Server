@@ -118,4 +118,13 @@ class BingoController(
         val game = bingoService.getByIdOrThrow(gameId)
         return game.winners()
     }
+
+    @GetMapping("/{id}/{username}")
+    fun getCard(
+        @PathVariable("id") gameId: String,
+        @PathVariable("username") username: String
+    ): BingoCard {
+        val game = bingoService.getByIdOrThrow(gameId)
+        return game.cards.firstOrNull { it.username.equals(username, ignoreCase = true) } ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "No card found for that username")
+    }
 }
