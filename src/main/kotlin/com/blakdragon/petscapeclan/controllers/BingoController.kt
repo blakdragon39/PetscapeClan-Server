@@ -7,8 +7,9 @@ import com.blakdragon.petscapeclan.controllers.responses.BingoGameIdResponse
 import com.blakdragon.petscapeclan.models.*
 import com.blakdragon.petscapeclan.services.BingoService
 import com.blakdragon.petscapeclan.utils.BINGO_NUM_SQUARES
-import org.bson.types.ObjectId
+import com.blakdragon.petscapeclan.utils.generateImage
 import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
 
@@ -100,7 +101,7 @@ class BingoController(
         @RequestBody request: SquareRequest
     ): BingoCard {
         val game = bingoService.getByIdOrThrow(gameId)
-        val card = game.cards.find { it.username == request.username } ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Card not found")
+        val card = bingoService.getByIdAndUsernameOrThrow(gameId, request.username)
         val square =  try { card.squares[request.index - 1] } catch (e: IndexOutOfBoundsException) { throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid square index") }
         square.completed = false
 
@@ -124,7 +125,19 @@ class BingoController(
         @PathVariable("id") gameId: String,
         @PathVariable("username") username: String
     ): BingoCard {
-        val game = bingoService.getByIdOrThrow(gameId)
-        return game.cards.firstOrNull { it.username.equals(username, ignoreCase = true) } ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "No card found for that username")
+        return bingoService.getByIdAndUsernameOrThrow(gameId, username)
+    }
+
+    @ResponseBody
+    @GetMapping(
+        value = ["/{id}/{username}/image"],
+        produces = [MediaType.IMAGE_PNG_VALUE]
+    )
+    fun getImage(
+        @PathVariable("id") gameId: String,
+        @PathVariable("username") username: String
+    ): ByteArray {
+        val card = bingoService.getByIdAndUsernameOrThrow(gameId, username)
+        return generateImage(card)
     }
 }

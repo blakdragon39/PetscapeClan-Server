@@ -1,5 +1,6 @@
 package com.blakdragon.petscapeclan.services
 
+import com.blakdragon.petscapeclan.models.BingoCard
 import com.blakdragon.petscapeclan.models.BingoGame
 import com.blakdragon.petscapeclan.utils.BasicCrud
 import org.springframework.data.domain.Page
@@ -37,6 +38,12 @@ class BingoService(private val bingoGameDAO: BingoGameDAO) : BasicCrud<String, B
 
     fun getByIdOrThrow(id: String): BingoGame =
         bingoGameDAO.findByIdOrNull(id) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Bingo game not found")
+
+    fun getByIdAndUsernameOrThrow(id: String, username: String): BingoCard {
+        val game = getByIdOrThrow(id)
+        return game.cards.firstOrNull { it.username.equals(username, ignoreCase = true) }
+            ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "No card found for that username")
+    }
 }
 
 
