@@ -7,6 +7,7 @@ import com.blakdragon.petscapeclan.controllers.responses.BingoGameIdResponse
 import com.blakdragon.petscapeclan.models.*
 import com.blakdragon.petscapeclan.services.BingoService
 import com.blakdragon.petscapeclan.utils.BINGO_NUM_SQUARES
+import org.bson.types.ObjectId
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
@@ -105,5 +106,10 @@ class BingoController(
 
         bingoService.update(game) //todo test this actually updates the square?
         return card
+    }
+
+    @GetMapping("/{id}/players")
+    fun listAllPlayers(@PathVariable("id") gameId: String): List<String> {
+        return bingoService.getByIdOrThrow(gameId).cards.map { it.username }
     }
 }
