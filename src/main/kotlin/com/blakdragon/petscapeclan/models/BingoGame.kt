@@ -35,24 +35,10 @@ class BingoGame(
         return cards.filter { it.isWinner(blackout) }
     }
 
-    fun toResponse(): BingoGameResponse = BingoGameResponse(this)
-
     fun toIdResponse(): BingoGameIdResponse = BingoGameIdResponse(id, name)
 }
 
-@Suppress("unused")
-class BingoGameResponse(bingoGame: BingoGame) {
-    val id: String = bingoGame.id.toString()
-    val name: String = bingoGame.name
-    val cards: List<BingoCardResponse> = bingoGame.cards.map { it.toResponse() }
-    val type: BingoGameType = bingoGame.type
-    val freeSpace: Boolean = bingoGame.freeSpace
-    val parentCard: List<BingoSquareResponse>? = bingoGame.parentCard?.map { it.toResponse() }
-}
-
-@Document
 class BingoCard(
-    @Id var id: String? = null,
     var username: String,
     var squares: List<BingoSquare>
 ) {
@@ -66,18 +52,8 @@ class BingoCard(
             }
         }
     }
-
-    fun toResponse(): BingoCardResponse = BingoCardResponse(this)
 }
 
-@Suppress("unused")
-class BingoCardResponse(bingoCard: BingoCard) {
-    val id: String = bingoCard.id.toString()
-    val username: String = bingoCard.username
-    var squares: List<BingoSquareResponse>? = bingoCard.squares.map { it.toResponse() }
-}
-
-@Document
 class BingoSquare {
     companion object {
         val FreeSquare = BingoSquare().apply {
@@ -85,22 +61,10 @@ class BingoSquare {
         }
     }
 
-    @Id var id: String? = null
 //    var boss: Boss? = null
 //    var item: Drop? = null
     var task: String? = null
     var completed = false
-
-    fun toResponse(): BingoSquareResponse = BingoSquareResponse(this)
-}
-
-@Suppress("unused")
-class BingoSquareResponse(bingoSquare: BingoSquare) {
-    val id: String = bingoSquare.id.toString()
-//    val boss: BossModel? = bingoSquare.boss?.toModel()
-//    val item: DropModel? = bingoSquare.item?.toModel()
-    val task: String? = bingoSquare.task
-    val completed: Boolean = bingoSquare.completed
 }
 
 enum class BingoGameType { BOSSES, ITEMS, COMBINED, OTHER }

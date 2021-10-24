@@ -1,6 +1,7 @@
 package com.blakdragon.petscapeclan.controllers
 
 import com.blakdragon.petscapeclan.controllers.requests.CustomBingoGameRequest
+import com.blakdragon.petscapeclan.controllers.requests.SquareRequest
 import com.blakdragon.petscapeclan.controllers.requests.UsernameRequest
 import com.blakdragon.petscapeclan.controllers.responses.BingoGameIdResponse
 import com.blakdragon.petscapeclan.models.*
@@ -24,7 +25,7 @@ class BingoController(
     @PostMapping("/new_custom_game")
     fun createCustomBingoGame(
         @RequestBody request: CustomBingoGameRequest
-    ): BingoGameResponse {
+    ): BingoGame {
         if (request.squares.size != BINGO_NUM_SQUARES) {
             throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Must provide 25 squares")
         }
@@ -53,15 +54,15 @@ class BingoController(
             }
         }
 
-        return bingoService.insert(game).toResponse()
+        return bingoService.insert(game)
     }
 
     @PostMapping("/{id}")
     fun addBingoCard(
-        @PathVariable("id") id: String,
+        @PathVariable("id") gameId: String,
         @RequestBody request: UsernameRequest
     ) : BingoCard {
-        val game = bingoService.getByIdOrThrow(id)
+        val game = bingoService.getByIdOrThrow(gameId)
 
         if (game.cards.any { it.username.equals(request.username, ignoreCase = true) }) {
             throw ResponseStatusException(HttpStatus.FORBIDDEN, "Card already exists for that user in this game")
@@ -75,6 +76,34 @@ class BingoController(
         game.cards.add(card)
         bingoService.update(game)
 
+        return card
+    }
+
+    @PostMapping("/{id}/complete")
+    fun completeSquare(
+        @PathVariable("id") gameId: String,
+        @RequestBody request: SquareRequest
+    ): BingoCard {
+        val game = bingoService.getByIdOrThrow(gameId)
+        val card = game.cards.find { it.username == request.username } ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Card not found")
+        val square =  try { card.squares[request.index - 1] } catch (e: IndexOutOfBoundsException) { throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid square index") }
+        square.completed = true
+
+        bingoService.update(game) //todo test this actually updates the square?
+        return card
+    }
+
+    @PostMapping("/{id}/uncomplete")
+    fun uncompleteSquare(
+        @PathVariable("id") gameId: String,
+        @RequestBody request: SquareRequest
+    ): BingoCard {
+        val game = bingoService.getByIdOrThrow(gameId)
+        val card = game.cards.find { it.username == request.username } ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Card not found")
+        val square =  try { card.squares[request.index - 1] } catch (e: IndexOutOfBoundsException) { throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid square index") }
+        square.completed = false
+
+        bingoService.update(game) //todo test this actually updates the square?
         return card
     }
 }
