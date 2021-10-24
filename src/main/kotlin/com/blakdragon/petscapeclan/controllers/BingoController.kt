@@ -112,4 +112,10 @@ class BingoController(
     fun listAllPlayers(@PathVariable("id") gameId: String): List<String> {
         return bingoService.getByIdOrThrow(gameId).cards.map { it.username }
     }
+
+    @GetMapping("/{id}/winners")
+    fun getWinners(@PathVariable("id") gameId: String): List<BingoCard> {
+        val game = bingoService.getByIdOrThrow(gameId)
+        return game.winners()
+    }
 }
