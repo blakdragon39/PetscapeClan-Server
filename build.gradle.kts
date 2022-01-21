@@ -17,28 +17,28 @@ repositories {
 }
 
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter")
+    implementation("org.springframework.boot:spring-boot-starter:2.5.6")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
-    implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
-    implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("org.springframework.boot:spring-boot-starter-webflux")
-    implementation("org.springframework.boot:spring-boot-gradle-plugin:2.0.1.RELEASE")
-    developmentOnly("org.springframework.boot:spring-boot-devtools")
+    implementation("org.springframework.boot:spring-boot-starter-data-mongodb:2.5.5")
+    implementation("org.springframework.boot:spring-boot-starter-web:2.5.6")
+    implementation("org.springframework.boot:spring-boot-starter-webflux:2.5.5")
+    implementation("org.springframework.boot:spring-boot-gradle-plugin:2.5.5")
+    developmentOnly("org.springframework.boot:spring-boot-devtools:2.5.5")
 
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    implementation("io.springfox:springfox-swagger2:2.7.0")
-    implementation("io.springfox:springfox-swagger-ui:2.7.0")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.0")
+    implementation("io.springfox:springfox-swagger2:3.0.0")
+    implementation("io.springfox:springfox-swagger-ui:3.0.0")
 
-    implementation("com.google.api-client:google-api-client:1.31.2")
+    implementation("com.google.api-client:google-api-client:1.32.2")
 
     implementation("org.mindrot:jbcrypt:0.4")
 
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-test:2.5.6")
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
-    testImplementation("com.github.fakemongo:fongo:2.1.0")
+    testImplementation("com.github.fakemongo:fongo:2.1.1")
 }
 
 tasks.withType<KotlinCompile> {

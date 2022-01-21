@@ -12,6 +12,7 @@ enum class PetType(
     KalphitePrincess("Kalphite Princess"),
     LilZik("Lil Zik"),
     LittleNightmare("Little Nightmare"),
+    Nexling("Nexling"),
     Noon("Noon"),
     Olmlet("Olmlet"),
     PetChaosElemental("Pet Chaos Elemental"),
