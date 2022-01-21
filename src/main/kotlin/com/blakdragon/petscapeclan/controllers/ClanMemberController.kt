@@ -22,6 +22,7 @@ class ClanMemberController(
         @RequestBody request: ClanMemberRequest
     ): ClanMemberResponse {
         userService.getAdminByTokenOrThrow(userToken)
+        //todo check rsn for duplicates
 
         val clanMember = ClanMember(
             runescapeName = request.runescapeName,
@@ -85,11 +86,8 @@ class ClanMemberController(
 
     @PutMapping("/{id}/update")
     fun pingClanMember(
-        @RequestHeader("Authorization") userToken: String,
         @PathVariable("id") id: String
     ): ClanMemberResponse {
-        userService.getAdminByTokenOrThrow(userToken)
-
         val clanMember = clanMemberService.getByIdOrThrow(id)
         updateClanMemberStats(clanMember)
         return clanMemberService.update(clanMember).toResponse()

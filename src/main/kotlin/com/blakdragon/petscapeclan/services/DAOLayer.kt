@@ -1,5 +1,6 @@
 package com.blakdragon.petscapeclan.services
 
+import com.blakdragon.petscapeclan.models.BingoGame
 import com.blakdragon.petscapeclan.models.ClanMember
 import com.blakdragon.petscapeclan.models.User
 import org.springframework.data.mongodb.repository.MongoRepository
@@ -12,3 +13,5 @@ interface UserDAO : MongoRepository<User, String> {
 interface ClanMemberDAO : MongoRepository<ClanMember, String> {
     fun findByRunescapeNameIgnoreCase(runescapeName: String): List<ClanMember>
 }
+
+interface BingoGameDAO : MongoRepository<BingoGame, String>
